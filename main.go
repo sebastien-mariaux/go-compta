@@ -1,5 +1,6 @@
 package main
 
+
 import (
 	"net/http"
 
@@ -9,26 +10,46 @@ import (
 func main() {
 	router := gin.Default()
 	router.GET("/expenses", getExpenses)
+	router.GET("/revenues", getRevenues)
+	router.GET("/invoices", getInvoices)
+
+	router.GET("/expenses/:id/vat", getExpenseVat)
 
 	router.Run("localhost:8080")
 }
 
-// Expense definition
-type expense struct {
-	ID     string  `json:"id"`
-	Number   string  `json:"number"`
-	Description  string  `json:"description"`
-	GrossAmount  float64 `json:"gross_amount"`
-	NetAmount  float64 `json:"net_amount"`
-}
-
-// Expense seeds
-var expenses = []expense{
-	{ID: "1", Number: "Ref001-43", Description: "Office Supplies", GrossAmount: 100.00, NetAmount: 80.00},
-	{ID: "2", Number: "ABC-oct-2024", Description: "Energy", GrossAmount: 345.4, NetAmount: 312.2},
-	{ID: "3", Number: "XXX0001", Description: "Car insurance", GrossAmount: 62.23, NetAmount: 56.98},
-}
 
 func getExpenses(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, expenses)
+}
+
+
+func getRevenues(c *gin.Context) {
+	c.IndentedJSON(http.StatusOK, revenues)
+}
+
+func getInvoices(c *gin.Context) {
+	var invoices []interface{}
+	for _, expense := range expenses {
+		invoices = append(invoices, expense)
+	}
+	for _, revenue := range revenues {
+		invoices = append(invoices, revenue)
+	}
+	c.IndentedJSON(http.StatusOK, invoices)
+}
+
+func getExpenseVat(context *gin.Context) {
+	id := context.Param("id")
+	for _, expense := range expenses {
+		if expense.ID == id {
+			context.IndentedJSON(http.StatusOK, amounts{
+				ID: expense.ID,
+				NetAmount: expense.NetAmount,
+				GrossAmount: expense.GrossAmount,
+			})
+			return
+		}
+	}
+	context.IndentedJSON(http.StatusNotFound, gin.H{"message": "expense not found"})
 }
