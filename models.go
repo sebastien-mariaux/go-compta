@@ -17,6 +17,10 @@ type expense struct {
 	Category string `json:"category"`
 }
 
+func (a amounts) ComputeVat() float64 {
+	return a.GrossAmount - a.NetAmount
+}
+
 
 // Revenue definition
 type revenue struct {
@@ -39,7 +43,7 @@ func (a amounts) MarshalJSON() ([]byte, error) {
 			VAT float64 `json:"vat"`
 			Alias
 	}{
-			VAT:   a.GrossAmount - a.NetAmount,
+			VAT:   a.ComputeVat(),
 			Alias: (Alias)(a),
 	})
 }

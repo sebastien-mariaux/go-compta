@@ -8,15 +8,9 @@ import (
 )
 
 func main() {
-	router := gin.Default()
-	router.GET("/expenses", getExpenses)
-	router.GET("/revenues", getRevenues)
-	router.GET("/invoices", getInvoices)
-
-	router.GET("/expenses/:id/vat", getExpenseVat)
-
-	router.Run("localhost:8080")
+	SetupRouter().Run("localhost:8080")
 }
+
 
 
 func getExpenses(c *gin.Context) {
