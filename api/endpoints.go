@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
+	"go-compta/accounting"
 	"go-compta/models"
 )
 
@@ -55,4 +56,14 @@ func GetRevenueVat(context *gin.Context) {
 		}
 	}
 	context.IndentedJSON(http.StatusNotFound, gin.H{"message": "revenue not found"})
+}
+
+func GetNetPNL(context *gin.Context) {
+	var netPNL = accounting.ComputeNetResult(models.RevenuesData, models.ExpensesData)
+	context.IndentedJSON(http.StatusOK, gin.H{"netPNL": netPNL})
+}
+
+func GetPNL(context *gin.Context) {
+	var pnl = accounting.ComputePNLBeforeTaxes(models.RevenuesData, models.ExpensesData)
+	context.IndentedJSON(http.StatusOK, gin.H{"pnl": pnl})
 }

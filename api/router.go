@@ -11,5 +11,8 @@ func SetupRouter() *gin.Engine {
 	router.GET("/expenses/:id/vat", GetExpenseVat)
 	router.GET("/revenues/:id/vat", GetRevenueVat)
 
+	router.GET("/pnl/net", GetNetPNL)
+	router.GET("/pnl", GetPNL)
+
 	return router
 }
