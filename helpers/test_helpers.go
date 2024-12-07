@@ -1,4 +1,4 @@
-package main
+package helpers
 
 import (
 	"encoding/json"
@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func performRequest(r http.Handler, method, path string) *httptest.ResponseRecorder {
+func PerformRequest(r http.Handler, method, path string) *httptest.ResponseRecorder {
 	req, _ := http.NewRequest(method, path, nil)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
@@ -20,7 +20,7 @@ func unmarshalResponse(w *httptest.ResponseRecorder, v interface{}) error {
 	return json.Unmarshal(w.Body.Bytes(), v)
 }
 
-func getJsonResponse(w *httptest.ResponseRecorder, t *testing.T, v interface{}) {
+func GetJsonResponse(w *httptest.ResponseRecorder, t *testing.T, v interface{}) {
 	err := unmarshalResponse(w, v)
 	assert.NoError(t, err)
 }
