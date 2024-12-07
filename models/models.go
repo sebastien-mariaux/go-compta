@@ -10,6 +10,10 @@ type Invoice struct {
 	NetAmount   float64 `json:"netAmount"`
 }
 
+func (i Invoice) ComputeVat() float64 {
+	return i.GrossAmount - i.NetAmount
+}
+
 // Expense definition
 type Expense struct {
 	Invoice
