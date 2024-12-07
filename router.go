@@ -9,6 +9,7 @@ func SetupRouter() *gin.Engine {
 	router.GET("/invoices", getInvoices)
 
 	router.GET("/expenses/:id/vat", getExpenseVat)
+	router.GET("/revenues/:id/vat", getRevenueVat)
 
 	return router
 }

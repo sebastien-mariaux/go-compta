@@ -1,8 +1,8 @@
-package main
+package models
 
 import "encoding/json"
 
-type invoice struct {
+type Invoice struct {
 	ID          string  `json:"id"`
 	Number      string  `json:"number"`
 	Description string  `json:"description"`
@@ -11,39 +11,38 @@ type invoice struct {
 }
 
 // Expense definition
-type expense struct {
-	invoice
+type Expense struct {
+	Invoice
 	Supplier string `json:"supplier"`
 	Category string `json:"category"`
 }
 
-func (a amounts) ComputeVat() float64 {
+func (a Amounts) ComputeVat() float64 {
 	return a.GrossAmount - a.NetAmount
 }
 
-
 // Revenue definition
-type revenue struct {
-	invoice
+type Revenue struct {
+	Invoice
 	Customer string `json:"customer"`
 	Category string `json:"category"`
 }
 
 // Amounts
-type amounts struct {
-	ID 				string  `json:"id"`
+type Amounts struct {
+	ID          string  `json:"id"`
 	NetAmount   float64 `json:"netAmount"`
 	GrossAmount float64 `json:"grossAmount"`
 }
 
 // Custom JSON marshaller for amounts
-func (a amounts) MarshalJSON() ([]byte, error) {
-	type Alias amounts
+func (a Amounts) MarshalJSON() ([]byte, error) {
+	type Alias Amounts
 	return json.Marshal(&struct {
-			VAT float64 `json:"vat"`
-			Alias
+		VAT float64 `json:"vat"`
+		Alias
 	}{
-			VAT:   a.ComputeVat(),
-			Alias: (Alias)(a),
+		VAT:   a.ComputeVat(),
+		Alias: (Alias)(a),
 	})
 }

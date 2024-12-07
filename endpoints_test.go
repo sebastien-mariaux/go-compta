@@ -1,54 +1,50 @@
 package main
 
 import (
-	"encoding/json"
+    "go-compta/models"
 	"net/http"
-	"net/http/httptest"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
-// Helper function to perform a GET request and return the response recorder
-func performRequest(r http.Handler, method, path string) *httptest.ResponseRecorder {
-    req, _ := http.NewRequest(method, path, nil)
-    w := httptest.NewRecorder()
-    r.ServeHTTP(w, req)
-    return w
-}
-
-// Helper function to unmarshal JSON response
-func unmarshalResponse(w *httptest.ResponseRecorder, v interface{}) error {
-    return json.Unmarshal(w.Body.Bytes(), v)
-}
-
-func getJsonResponse(w *httptest.ResponseRecorder, t *testing.T, v interface{}) {
-    err := unmarshalResponse(w, v)
-    assert.NoError(t, err)
-}
+var router = SetupRouter()
 
 func TestGetExpenses(t *testing.T) {
-    r := SetupRouter()
-    w := performRequest(r, "GET", "/expenses")
+    w := performRequest(router, "GET", "/expenses")
 
     assert.Equal(t, http.StatusOK, w.Code)
 
-    var response []expense
+    var response []models.Expense
     getJsonResponse(w, t, &response)
 
-    // Test we have 3 elements in response
     assert.Equal(t, 3, len(response))
 }
 
 func TestGetRevenues(t *testing.T) {
-    r := SetupRouter()
-    w := performRequest(r, "GET", "/revenues")
+    w := performRequest(router, "GET", "/revenues")
 
     assert.Equal(t, http.StatusOK, w.Code)
 
-    var response []revenue
+    var response []models.Revenue
     getJsonResponse(w, t, &response)
 
-    // Test we have 3 elements in response
     assert.Equal(t, 3, len(response))
+}
+
+func TestExpenseVat(t *testing.T) {
+    w := performRequest(router, "GET", "/expenses/1/vat")
+
+    assert.Equal(t, http.StatusOK, w.Code)
+
+    var response models.Amounts
+    getJsonResponse(w, t, &response)
+
+    assert.Equal(t, 20.0, response.ComputeVat())
+}
+
+func TestExpenseVatNotFound(t *testing.T) {
+    w := performRequest(router, "GET", "/expenses/10/vat")
+
+    assert.Equal(t, http.StatusNotFound, w.Code)
 }

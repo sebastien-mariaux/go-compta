@@ -1,11 +1,13 @@
 package main
 
-
+import (
+	"go-compta/models"
+)
 
 // Expense seeds
-var expenses = []expense{
+var expenses = []models.Expense{
 	{
-			invoice: invoice{
+			Invoice: models.Invoice{
 					ID:          "1",
 					Number:      "Ref001-43",
 					Description: "Office Supplies",
@@ -16,7 +18,7 @@ var expenses = []expense{
 			Category: "Expense",
 	},
 	{
-			invoice: invoice{
+			Invoice: models.Invoice{
 					ID:          "2",
 					Number:      "ABC-oct-2024",
 					Description: "Energy",
@@ -27,7 +29,7 @@ var expenses = []expense{
 			Category: "Expense",
 	},
 	{
-			invoice: invoice{
+			Invoice: models.Invoice{
 					ID:          "3",
 					Number:      "XXX0001",
 					Description: "Car insurance",
@@ -41,9 +43,9 @@ var expenses = []expense{
 
 
 // Revenue seeds
-var revenues = []revenue{
+var revenues = []models.Revenue{
 	{
-			invoice: invoice{
+			Invoice: models.Invoice{
 					ID:          "4",
 					Number:      "CLI-0001",
 					Description: "Consulting",
@@ -55,7 +57,7 @@ var revenues = []revenue{
 	},
 	{
 
-			invoice: invoice{
+			Invoice: models.Invoice{
 					ID:          "5",
 					Number:      "DEV-0001",
 					Description: "Development",
@@ -67,7 +69,7 @@ var revenues = []revenue{
 	},
 	{
 
-			invoice: invoice{
+			Invoice: models.Invoice{
 					ID:          "6",
 					Number:      "XXX0001",
 					Description: "Training",
