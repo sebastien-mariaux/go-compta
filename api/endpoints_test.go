@@ -62,10 +62,13 @@ func TestGetNetPNL(t *testing.T) {
 	// assert.Equal(t, 4043.0, response["net_pnl"])
 }
 
+// type PNLResponse struct {
+// 	PNL float64 `json:"pnl"`
+// }
 func TestGetPNL(t *testing.T) {
 	w := helpers.PerformRequest(router, "GET", "/pnl")
 	assert.Equal(t, http.StatusOK, w.Code)
 
-	// var response map[string]string
-	// assert.Equal(t, 4043.0, response["pnl"])
+	// var response PNLResponse
+	// assert.Equal(t, 4043.0, response.PNL)
 }

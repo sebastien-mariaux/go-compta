@@ -6,8 +6,8 @@ type Invoice struct {
 	ID          string  `json:"id"`
 	Number      string  `json:"number"`
 	Description string  `json:"description"`
-	GrossAmount float64 `json:"grossAmount"`
-	NetAmount   float64 `json:"netAmount"`
+	GrossAmount float64 `json:"gross_amount"`
+	NetAmount   float64 `json:"net_amount"`
 }
 
 func (i Invoice) ComputeVat() float64 {
@@ -16,7 +16,7 @@ func (i Invoice) ComputeVat() float64 {
 
 // Expense definition
 type Expense struct {
-	Invoice
+	Invoice `json:"invoice"`
 	Supplier string `json:"supplier"`
 	Category string `json:"category"`
 }
@@ -35,8 +35,8 @@ type Revenue struct {
 // Amounts
 type Amounts struct {
 	ID          string  `json:"id"`
-	NetAmount   float64 `json:"netAmount"`
-	GrossAmount float64 `json:"grossAmount"`
+	NetAmount   float64 `json:"net_amount"`
+	GrossAmount float64 `json:"gross_amount"`
 }
 
 // Custom JSON marshaller for amounts

@@ -14,5 +14,8 @@ func SetupRouter() *gin.Engine {
 	router.GET("/pnl/net", GetNetPNL)
 	router.GET("/pnl", GetPNL)
 
+	router.POST("/expenses", CreateExpense)
+	
+
 	return router
 }

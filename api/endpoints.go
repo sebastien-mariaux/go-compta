@@ -1,6 +1,7 @@
 package api
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -67,3 +68,25 @@ func GetPNL(context *gin.Context) {
 	var pnl = accounting.ComputePNLBeforeTaxes(models.RevenuesData, models.ExpensesData)
 	context.IndentedJSON(http.StatusOK, gin.H{"pnl": pnl})
 }
+
+func CreateExpense(c *gin.Context) {
+	var newExpense models.Expense
+
+	// Bind the JSON to the newExpense struct
+	if err := c.BindJSON(&newExpense); err != nil {
+		// Log the error
+		fmt.Println("Error:", err)
+		fmt.Println("Failed to bind JSON")
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		return
+	}
+
+	models.ExpensesData = append(models.ExpensesData, newExpense)
+	c.IndentedJSON(http.StatusCreated, newExpense)
+}
+
+// curl http://localhost:8080/expenses \
+//     --include \
+//     --header "Content-Type: application/json" \
+//     --request "POST" \
+//     --data '{ "invoice": {"id": "6", "number": "CLI-0002", "description": "Consulting", "grossAmount": 10000.00, "netAmount": 8000.00}, "supplier": "Help-me-corp", "category": "Expense"}'
