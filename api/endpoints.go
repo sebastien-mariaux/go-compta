@@ -84,9 +84,24 @@ func CreateExpense(c *gin.Context) {
 	models.ExpensesData = append(models.ExpensesData, newExpense)
 	c.IndentedJSON(http.StatusCreated, newExpense)
 }
-
 // curl http://localhost:8080/expenses \
 //     --include \
 //     --header "Content-Type: application/json" \
 //     --request "POST" \
 //     --data '{ "invoice": {"id": "6", "number": "CLI-0002", "description": "Consulting", "grossAmount": 10000.00, "netAmount": 8000.00}, "supplier": "Help-me-corp", "category": "Expense"}'
+
+func CreateRevenue(c *gin.Context) {
+	var newRevenue models.Revenue
+
+	// Bind the JSON to the newRevenue struct
+	if err := c.BindJSON(&newRevenue); err != nil {
+		// Log the error
+		fmt.Println("Error:", err)
+		fmt.Println("Failed to bind JSON")
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		return
+	}
+
+	models.RevenuesData = append(models.RevenuesData, newRevenue)
+	c.IndentedJSON(http.StatusCreated, newRevenue)
+}
